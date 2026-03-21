@@ -7,836 +7,230 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --green:     #3DDC84;
-      --blue:      #2B7FD4;
-      --teal:      #2EC4B6;
-      --dark:      #0F1B2D;
-      --dark2:     #162236;
-      --card:      #1A2B42;
-      --text:      #E8F4FD;
-      --muted:     #8AADC4;
-      --white:     #ffffff;
-      --grad:      linear-gradient(135deg, #3DDC84 0%, #2B7FD4 100%);
-      --grad2:     linear-gradient(135deg, #2EC4B6 0%, #2B7FD4 100%);
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--dark);
-      color: var(--text);
-      overflow-x: hidden;
-    }
-
-    /* ── NOISE TEXTURE OVERLAY ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.4;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 48px;
-      background: rgba(15, 27, 45, 0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(61, 220, 132, 0.1);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-
-    .nav-logo img {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-    }
-
-    .nav-logo span {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 900;
-      font-size: 22px;
-      background: var(--grad);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .nav-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--grad);
-      color: var(--dark);
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 14px;
-      padding: 10px 24px;
-      border-radius: 50px;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(61, 220, 132, 0.3);
-    }
-
-    .nav-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(61, 220, 132, 0.4);
-    }
-
-    /* ── HERO ── */
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 120px 24px 80px;
-      overflow: hidden;
-    }
-
-    /* Glowing orbs */
-    .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.15;
-      animation: float 8s ease-in-out infinite;
-    }
-
-    .orb-1 {
-      width: 500px; height: 500px;
-      background: var(--green);
-      top: -100px; left: -100px;
-      animation-delay: 0s;
-    }
-
-    .orb-2 {
-      width: 400px; height: 400px;
-      background: var(--blue);
-      bottom: -50px; right: -100px;
-      animation-delay: 3s;
-    }
-
-    .orb-3 {
-      width: 300px; height: 300px;
-      background: var(--teal);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      animation-delay: 1.5s;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-30px); }
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(61, 220, 132, 0.1);
-      border: 1px solid rgba(61, 220, 132, 0.3);
-      color: var(--green);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 8px 20px;
-      border-radius: 50px;
-      margin-bottom: 32px;
-      animation: fadeUp 0.6s ease forwards;
-      opacity: 0;
-    }
-
-    .hero-badge::before {
-      content: '';
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--green);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.5); }
-    }
-
-    .hero-logo {
-      width: 100px;
-      height: 100px;
-      border-radius: 28px;
-      margin-bottom: 32px;
-      animation: fadeUp 0.6s ease 0.1s forwards;
-      opacity: 0;
-      box-shadow: 0 20px 60px rgba(61, 220, 132, 0.3);
-    }
-
-    .hero h1 {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 900;
-      font-size: clamp(42px, 7vw, 80px);
-      line-height: 1.1;
-      margin-bottom: 24px;
-      animation: fadeUp 0.6s ease 0.2s forwards;
-      opacity: 0;
-    }
-
-    .hero h1 .grad-text {
-      background: var(--grad);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero p {
-      font-size: clamp(16px, 2.5vw, 20px);
-      color: var(--muted);
-      max-width: 600px;
-      line-height: 1.7;
-      margin-bottom: 48px;
-      animation: fadeUp 0.6s ease 0.3s forwards;
-      opacity: 0;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
-      animation: fadeUp 0.6s ease 0.4s forwards;
-      opacity: 0;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--grad);
-      color: var(--dark);
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 16px;
-      padding: 16px 36px;
-      border-radius: 50px;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 8px 30px rgba(61, 220, 132, 0.35);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 16px 40px rgba(61, 220, 132, 0.45);
-    }
-
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: var(--text);
-      font-family: 'Nunito', sans-serif;
-      font-weight: 700;
-      font-size: 16px;
-      padding: 16px 36px;
-      border-radius: 50px;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.1);
-      border-color: rgba(255,255,255,0.3);
-      transform: translateY(-3px);
-    }
-
-    /* WhatsApp icon */
-    .wa-icon {
-      width: 22px; height: 22px;
-      fill: currentColor;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── CHAT MOCKUP ── */
-    .chat-section {
-      padding: 80px 24px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .chat-mockup {
-      background: var(--card);
-      border-radius: 24px;
-      border: 1px solid rgba(61, 220, 132, 0.15);
-      width: 100%;
-      max-width: 420px;
-      overflow: hidden;
-      box-shadow: 0 40px 80px rgba(0,0,0,0.4);
-    }
-
-    .chat-header {
-      background: var(--grad);
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .chat-avatar {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-    }
-
-    .chat-info strong {
-      display: block;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      color: var(--dark);
-      font-size: 15px;
-    }
-
-    .chat-info span {
-      font-size: 12px;
-      color: rgba(15,27,45,0.7);
-    }
-
-    .chat-body {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      background: #0e1621;
-    }
-
-    .bubble {
-      max-width: 85%;
-      padding: 12px 16px;
-      border-radius: 16px;
-      font-size: 14px;
-      line-height: 1.5;
-      animation: bubbleIn 0.4s ease forwards;
-      opacity: 0;
-    }
-
-    .bubble-bot {
-      background: var(--card);
-      border-bottom-left-radius: 4px;
-      align-self: flex-start;
-      border: 1px solid rgba(61,220,132,0.1);
-    }
-
-    .bubble-user {
-      background: linear-gradient(135deg, #005c4b, #007a63);
-      border-bottom-right-radius: 4px;
-      align-self: flex-end;
-      color: #e9fffa;
-    }
-
-    .bubble:nth-child(1) { animation-delay: 0.5s; }
-    .bubble:nth-child(2) { animation-delay: 1.0s; }
-    .bubble:nth-child(3) { animation-delay: 1.5s; }
-    .bubble:nth-child(4) { animation-delay: 2.0s; }
-    .bubble:nth-child(5) { animation-delay: 2.5s; }
-    .bubble:nth-child(6) { animation-delay: 3.0s; }
-
-    @keyframes bubbleIn {
-      from { opacity: 0; transform: translateY(10px) scale(0.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .bubble-time {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 4px;
-      text-align: right;
-    }
-
-    /* ── HOW IT WORKS ── */
-    .section {
-      padding: 100px 24px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      background: var(--grad);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-
-    .section-title {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 900;
-      font-size: clamp(32px, 5vw, 52px);
-      text-align: center;
-      margin-bottom: 16px;
-      line-height: 1.2;
-    }
-
-    .section-sub {
-      text-align: center;
-      color: var(--muted);
-      font-size: 18px;
-      max-width: 560px;
-      margin: 0 auto 64px;
-      line-height: 1.7;
-    }
-
-    /* Steps */
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-    }
-
-    .step-card {
-      background: var(--card);
-      border: 1px solid rgba(61, 220, 132, 0.1);
-      border-radius: 20px;
-      padding: 36px 32px;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.3s, border-color 0.3s;
-    }
-
-    .step-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(61, 220, 132, 0.3);
-    }
-
-    .step-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--grad);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .step-card:hover::before {
-      opacity: 1;
-    }
-
-    .step-number {
-      width: 48px; height: 48px;
-      border-radius: 14px;
-      background: rgba(61, 220, 132, 0.1);
-      border: 1px solid rgba(61, 220, 132, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 900;
-      font-size: 20px;
-      color: var(--green);
-      margin-bottom: 20px;
-    }
-
-    .step-card h3 {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-
-    .step-card p {
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.65;
-    }
-
-    /* ── FEATURES ── */
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
-    .feature-card {
-      background: var(--card);
-      border: 1px solid rgba(43, 127, 212, 0.15);
-      border-radius: 20px;
-      padding: 32px;
-      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(43, 127, 212, 0.35);
-      box-shadow: 0 20px 40px rgba(43, 127, 212, 0.1);
-    }
-
-    .feature-icon {
-      width: 52px; height: 52px;
-      border-radius: 16px;
-      background: var(--grad2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-      margin-bottom: 20px;
-    }
-
-    .feature-card h3 {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-
-    .feature-card p {
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.65;
-    }
-
-    /* ── STATS ── */
-    .stats-section {
-      background: var(--dark2);
-      border-top: 1px solid rgba(61, 220, 132, 0.08);
-      border-bottom: 1px solid rgba(61, 220, 132, 0.08);
-      padding: 80px 24px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 40px;
-      max-width: 900px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .stat-number {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 900;
-      font-size: 52px;
-      background: var(--grad);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-
-    .stat-label {
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 500;
-    }
-
-    /* ── CTA SECTION ── */
-    .cta-section {
-      padding: 120px 24px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-section::before {
-      content: '';
-      position: absolute;
-      width: 600px; height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(61,220,132,0.08) 0%, transparent 70%);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-    }
-
-    .cta-section h2 {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 900;
-      font-size: clamp(36px, 6vw, 64px);
-      line-height: 1.15;
-      margin-bottom: 20px;
-    }
-
-    .cta-section p {
-      color: var(--muted);
-      font-size: 18px;
-      max-width: 500px;
-      margin: 0 auto 48px;
-      line-height: 1.7;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--dark2);
-      border-top: 1px solid rgba(255,255,255,0.05);
-      padding: 48px 24px;
-      text-align: center;
-    }
-
-    .footer-logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .footer-logo img {
-      width: 32px; height: 32px;
-      border-radius: 8px;
-    }
-
-    .footer-logo span {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 900;
-      font-size: 20px;
-      background: var(--grad);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    footer p {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    footer a {
-      color: var(--green);
-      text-decoration: none;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      nav { padding: 16px 20px; }
-      .hero { padding: 100px 20px 60px; }
-      .section { padding: 60px 20px; }
-    }
+      --green:#3DDC84;--blue:#2B7FD4;--teal:#2EC4B6;--dark:#0F1B2D;--dark2:#162236;
+      --card:#1A2B42;--text:#E8F4FD;--muted:#8AADC4;--white:#ffffff;
+      --grad:linear-gradient(135deg,#3DDC84 0%,#2B7FD4 100%);
+      --grad2:linear-gradient(135deg,#2EC4B6 0%,#2B7FD4 100%);
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.4;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(15,27,45,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(61,220,132,0.1);}
+    .nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+    .nav-logo img{width:36px;height:36px;border-radius:10px;}
+    .nav-logo span{font-family:'Nunito',sans-serif;font-weight:900;font-size:22px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .nav-cta{display:inline-flex;align-items:center;gap:8px;background:var(--grad);color:var(--dark);font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;padding:10px 24px;border-radius:50px;text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 4px 20px rgba(61,220,132,0.3);}
+    .nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(61,220,132,0.4);}
+    .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;overflow:hidden;}
+    .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.15;animation:float 8s ease-in-out infinite;}
+    .orb-1{width:500px;height:500px;background:var(--green);top:-100px;left:-100px;}
+    .orb-2{width:400px;height:400px;background:var(--blue);bottom:-50px;right:-100px;animation-delay:3s;}
+    .orb-3{width:300px;height:300px;background:var(--teal);top:50%;left:50%;transform:translate(-50%,-50%);animation-delay:1.5s;}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(61,220,132,0.1);border:1px solid rgba(61,220,132,0.3);color:var(--green);font-size:13px;font-weight:600;padding:8px 20px;border-radius:50px;margin-bottom:32px;animation:fadeUp 0.6s ease forwards;opacity:0;}
+    .hero-badge::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.5)}}
+    .hero-logo{width:100px;height:100px;border-radius:28px;margin-bottom:32px;animation:fadeUp 0.6s ease 0.1s forwards;opacity:0;box-shadow:0 20px 60px rgba(61,220,132,0.3);}
+    .hero h1{font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(42px,7vw,80px);line-height:1.1;margin-bottom:24px;animation:fadeUp 0.6s ease 0.2s forwards;opacity:0;}
+    .hero h1 .grad-text{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero p{font-size:clamp(16px,2.5vw,20px);color:var(--muted);max-width:600px;line-height:1.7;margin-bottom:48px;animation:fadeUp 0.6s ease 0.3s forwards;opacity:0;}
+    .hero-buttons{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;animation:fadeUp 0.6s ease 0.4s forwards;opacity:0;}
+    .btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--grad);color:var(--dark);font-family:'Nunito',sans-serif;font-weight:800;font-size:16px;padding:16px 36px;border-radius:50px;text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 8px 30px rgba(61,220,132,0.35);}
+    .btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(61,220,132,0.45);}
+    .btn-secondary{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);color:var(--text);font-family:'Nunito',sans-serif;font-weight:700;font-size:16px;padding:16px 36px;border-radius:50px;text-decoration:none;transition:all 0.2s;}
+    .btn-secondary:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.3);transform:translateY(-3px);}
+    .wa-icon{width:22px;height:22px;fill:currentColor;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    .chat-section{padding:80px 24px;display:flex;justify-content:center;}
+    .chat-mockup{background:var(--card);border-radius:24px;border:1px solid rgba(61,220,132,0.15);width:100%;max-width:420px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,0.4);}
+    .chat-header{background:var(--grad);padding:16px 20px;display:flex;align-items:center;gap:12px;}
+    .chat-avatar{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;}
+    .chat-info strong{display:block;font-family:'Nunito',sans-serif;font-weight:800;color:var(--dark);font-size:15px;}
+    .chat-info span{font-size:12px;color:rgba(15,27,45,0.7);}
+    .chat-body{padding:20px;display:flex;flex-direction:column;gap:12px;background:#0e1621;}
+    .bubble{max-width:85%;padding:12px 16px;border-radius:16px;font-size:14px;line-height:1.5;animation:bubbleIn 0.4s ease forwards;opacity:0;}
+    .bubble-bot{background:var(--card);border-bottom-left-radius:4px;align-self:flex-start;border:1px solid rgba(61,220,132,0.1);}
+    .bubble-user{background:linear-gradient(135deg,#005c4b,#007a63);border-bottom-right-radius:4px;align-self:flex-end;color:#e9fffa;}
+    .bubble:nth-child(1){animation-delay:0.5s}.bubble:nth-child(2){animation-delay:1.0s}.bubble:nth-child(3){animation-delay:1.5s}.bubble:nth-child(4){animation-delay:2.0s}.bubble:nth-child(5){animation-delay:2.5s}.bubble:nth-child(6){animation-delay:3.0s}
+    @keyframes bubbleIn{from{opacity:0;transform:translateY(10px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+    .bubble-time{font-size:11px;color:var(--muted);margin-top:4px;text-align:right;}
+    .section{padding:100px 24px;max-width:1100px;margin:0 auto;}
+    .section-label{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;text-align:center;}
+    .section-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(32px,5vw,52px);text-align:center;margin-bottom:16px;line-height:1.2;}
+    .section-sub{text-align:center;color:var(--muted);font-size:18px;max-width:560px;margin:0 auto 64px;line-height:1.7;}
+    .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;}
+    .step-card{background:var(--card);border:1px solid rgba(61,220,132,0.1);border-radius:20px;padding:36px 32px;position:relative;overflow:hidden;transition:transform 0.3s,border-color 0.3s;}
+    .step-card:hover{transform:translateY(-6px);border-color:rgba(61,220,132,0.3);}
+    .step-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad);opacity:0;transition:opacity 0.3s;}
+    .step-card:hover::before{opacity:1;}
+    .step-number{width:48px;height:48px;border-radius:14px;background:rgba(61,220,132,0.1);border:1px solid rgba(61,220,132,0.2);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;color:var(--green);margin-bottom:20px;}
+    .step-card h3{font-family:'Nunito',sans-serif;font-weight:800;font-size:20px;margin-bottom:10px;}
+    .step-card p{color:var(--muted);font-size:15px;line-height:1.65;}
+    .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
+    .feature-card{background:var(--card);border:1px solid rgba(43,127,212,0.15);border-radius:20px;padding:32px;transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;}
+    .feature-card:hover{transform:translateY(-6px);border-color:rgba(43,127,212,0.35);box-shadow:0 20px 40px rgba(43,127,212,0.1);}
+    .feature-icon{width:52px;height:52px;border-radius:16px;background:var(--grad2);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:20px;}
+    .feature-card h3{font-family:'Nunito',sans-serif;font-weight:800;font-size:18px;margin-bottom:10px;}
+    .feature-card p{color:var(--muted);font-size:15px;line-height:1.65;}
+    .stats-section{background:var(--dark2);border-top:1px solid rgba(61,220,132,0.08);border-bottom:1px solid rgba(61,220,132,0.08);padding:80px 24px;}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px;max-width:900px;margin:0 auto;text-align:center;}
+    .stat-number{font-family:'Nunito',sans-serif;font-weight:900;font-size:52px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:8px;}
+    .stat-label{color:var(--muted);font-size:15px;font-weight:500;}
+    .cta-section{padding:120px 24px;text-align:center;position:relative;overflow:hidden;}
+    .cta-section::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(61,220,132,0.08) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+    .cta-section h2{font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(36px,6vw,64px);line-height:1.15;margin-bottom:20px;}
+    .cta-section p{color:var(--muted);font-size:18px;max-width:500px;margin:0 auto 48px;line-height:1.7;}
+    footer{background:var(--dark2);border-top:1px solid rgba(255,255,255,0.05);padding:48px 24px;text-align:center;}
+    .footer-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;}
+    .footer-logo img{width:32px;height:32px;border-radius:8px;}
+    .footer-logo span{font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    footer p{color:var(--muted);font-size:14px;margin-bottom:8px;}
+    footer a{color:var(--green);text-decoration:none;}
+    @media(max-width:768px){nav{padding:16px 20px;}.hero{padding:100px 20px 60px;}.section{padding:60px 20px;}}
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#" class="nav-logo">
-      <img src="logo.png" alt="Pathrose" onerror="this.style.display='none'" />
-      <span>Pathrose</span>
-    </a>
-    <a href="https://wa.me/18143634489" class="nav-cta" target="_blank">
-      <svg class="wa-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Get Started Free
-    </a>
-  </nav>
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="logo.png" alt="Pathrose" onerror="this.style.display='none'" />
+    <span>Pathrose</span>
+  </a>
+  <a href="https://wa.me/18143634489?text=Hi" class="nav-cta" target="_blank">
+    <svg class="wa-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Get Started Free
+  </a>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-
-    <div class="hero-badge">🎉 Now in Private Beta</div>
-    <img src="logo.png" alt="Pathrose" class="hero-logo" onerror="this.style.background='linear-gradient(135deg,#3DDC84,#2B7FD4)'" />
-
-    <h1>Your personal assistant<br />lives on <span class="grad-text">WhatsApp</span></h1>
-
-    <p>Pathrose remembers everything so you do not have to. Reminders, daily briefings, evening check-ins — all on WhatsApp. No app to install.</p>
-
-    <div class="hero-buttons">
-      <a href="https://wa.me/18143634489?text=Hi" class="btn-primary" target="_blank">
-        <svg class="wa-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Start on WhatsApp
-      </a>
-      <a href="#how-it-works" class="btn-secondary">See how it works</a>
-    </div>
-  </section>
-
-  <!-- CHAT MOCKUP -->
-  <div class="chat-section">
-    <div class="chat-mockup">
-      <div class="chat-header">
-        <div class="chat-avatar">🔔</div>
-        <div class="chat-info">
-          <strong>Pathrose</strong>
-          <span>Your Executive Assistant · Online</span>
-        </div>
-      </div>
-      <div class="chat-body">
-        <div class="bubble bubble-bot">
-          👋 Welcome to <strong>Pathrose</strong> — your personal executive assistant.<br /><br />
-          This setup takes about <strong>2 minutes</strong>. What is your first name?
-          <div class="bubble-time">9:00 AM ✓✓</div>
-        </div>
-        <div class="bubble bubble-user">
-          Joyce
-          <div class="bubble-time">9:00 AM ✓✓</div>
-        </div>
-        <div class="bubble bubble-bot">
-          Nice to meet you, <strong>Joyce</strong>! 🎉<br /><br />
-          What time would you like your morning briefing? I will send you all your tasks for the day at this time.
-          <div class="bubble-time">9:00 AM ✓✓</div>
-        </div>
-        <div class="bubble bubble-user">
-          7am please
-          <div class="bubble-time">9:01 AM ✓✓</div>
-        </div>
-        <div class="bubble bubble-bot">
-          ✅ Got it! Morning briefing set for <strong>7:00 AM</strong>.<br /><br />
-          Now, what would you like me to remind you about?
-          <div class="bubble-time">9:01 AM ✓✓</div>
-        </div>
-        <div class="bubble bubble-user">
-          Remind me to call the dentist tomorrow at 11am for my annual checkup
-          <div class="bubble-time">9:01 AM ✓✓</div>
-        </div>
-        <div class="bubble bubble-bot">
-          Please confirm:<br /><br />
-          📌 <strong>Call dentist</strong><br />
-          📝 Annual checkup<br />
-          🕐 Tomorrow, 11:00 AM<br /><br />
-          Reply <strong>Yes</strong> to save or <strong>No</strong> to re-enter.
-          <div class="bubble-time">9:01 AM ✓✓</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- HOW IT WORKS -->
-  <section class="section" id="how-it-works">
-    <p class="section-label">How It Works</p>
-    <h2 class="section-title">Set up in 2 minutes.<br />Never forget again.</h2>
-    <p class="section-sub">No app to download. No account to create. Just open WhatsApp and say Hi.</p>
-
-    <div class="steps">
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <h3>Say Hi on WhatsApp</h3>
-        <p>Send "Hi" to Pathrose on WhatsApp. A quick 2-minute setup collects your name, birthday, and preferred reminder times.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <h3>Tell me what to remember</h3>
-        <p>Just talk naturally. "Remind me to call John tomorrow at 3pm." Pathrose understands and confirms before saving anything.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-number">3</div>
-        <h3>Get reminded at the right time</h3>
-        <p>Pathrose messages you at exactly the right moment. Snooze, mark done, or reschedule — all by just replying.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURES -->
-  <section class="section" id="features">
-    <p class="section-label">Features</p>
-    <h2 class="section-title">Everything you need.<br />Nothing you don't.</h2>
-    <p class="section-sub">Built for people who want to stay on top of their day without the complexity.</p>
-
-    <div class="features">
-      <div class="feature-card">
-        <div class="feature-icon">☀️</div>
-        <h3>Morning Briefing</h3>
-        <p>Every morning at your chosen time, Pathrose sends you a complete list of everything on your plate for the day.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🌙</div>
-        <h3>Evening Check-In</h3>
-        <p>Each evening, review your day. Mark tasks done and Pathrose automatically reschedules anything incomplete to tomorrow.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🔔</div>
-        <h3>Precise Reminders</h3>
-        <p>Reminders fire at the exact time you specify. Snooze by 10 or 30 minutes, or mark complete — all by replying.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🏆</div>
-        <h3>Weekly Motivation</h3>
-        <p>Every Sunday morning, get your weekly stats — tasks completed, completion rate, and a high energy message to start the week.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🎂</div>
-        <h3>Birthday Greeting</h3>
-        <p>Pathrose remembers your birthday and sends a personal greeting on your special day. Small touches matter.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🧠</div>
-        <h3>AI Understanding</h3>
-        <p>Say it any way you want. Pathrose uses AI to understand natural language and always confirms before saving.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- STATS -->
-  <div class="stats-section">
-    <div class="stats-grid">
-      <div>
-        <div class="stat-number">2min</div>
-        <div class="stat-label">Setup time</div>
-      </div>
-      <div>
-        <div class="stat-number">0</div>
-        <div class="stat-label">Apps to install</div>
-      </div>
-      <div>
-        <div class="stat-number">24/7</div>
-        <div class="stat-label">Always available</div>
-      </div>
-      <div>
-        <div class="stat-number">100%</div>
-        <div class="stat-label">On WhatsApp</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CTA -->
-  <section class="cta-section">
-    <h2>Ready to stop<br /><span style="background:linear-gradient(135deg,#3DDC84,#2B7FD4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">forgetting things?</span></h2>
-    <p>Join the private beta. Say Hi to Pathrose on WhatsApp and get set up in 2 minutes.</p>
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="hero-badge">🎉 Private Beta — 10 spots only</div>
+  <img src="logo.png" alt="Pathrose" class="hero-logo" onerror="this.style.background='linear-gradient(135deg,#3DDC84,#2B7FD4)'" />
+  <h1>Your personal assistant<br />lives on <span class="grad-text">WhatsApp</span></h1>
+  <p>Pathrose remembers everything so you do not have to. Reminders, daily briefings, evening check-ins — all on WhatsApp. No app to install. Setup in under a minute.</p>
+  <div class="hero-buttons">
     <a href="https://wa.me/18143634489?text=Hi" class="btn-primary" target="_blank">
       <svg class="wa-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Start on WhatsApp — It's Free
+      Start on WhatsApp
     </a>
-  </section>
+    <a href="#how-it-works" class="btn-secondary">See how it works</a>
+  </div>
+</section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">
-      <img src="logo.png" alt="Pathrose" onerror="this.style.display='none'" />
-      <span>Pathrose</span>
+<!-- CHAT MOCKUP — reflects simplified onboarding -->
+<div class="chat-section">
+  <div class="chat-mockup">
+    <div class="chat-header">
+      <div class="chat-avatar">🔔</div>
+      <div class="chat-info">
+        <strong>Pathrose</strong>
+        <span>Your Personal Assistant · Online</span>
+      </div>
     </div>
-    <p>Your personal WhatsApp reminder assistant.</p>
-    <p>Currently in private beta · <a href="mailto:peterjohncheeramattam@gmail.com">Contact us</a></p>
-    <p style="margin-top:16px;font-size:12px;color:#4a6580;">© 2026 Pathrose. All rights reserved.</p>
-  </footer>
+    <div class="chat-body">
+      <div class="bubble bubble-bot">
+        👋 Welcome to <strong>Pathrose</strong>!<br /><br />
+        Setup takes <strong>less than a minute</strong>.<br /><br />
+        What is your first name?
+        <div class="bubble-time">9:00 AM ✓✓</div>
+      </div>
+      <div class="bubble bubble-user">
+        Peter
+        <div class="bubble-time">9:00 AM ✓✓</div>
+      </div>
+      <div class="bubble bubble-bot">
+        Nice to meet you, <strong>Peter</strong>! 👋<br /><br />
+        What time would you like your <strong>morning briefing</strong>?<br /><em style="color:#8AADC4">e.g. 7am or 8:30am</em>
+        <div class="bubble-time">9:00 AM ✓✓</div>
+      </div>
+      <div class="bubble bubble-user">
+        8am
+        <div class="bubble-time">9:00 AM ✓✓</div>
+      </div>
+      <div class="bubble bubble-bot">
+        ✅ Set for <strong>8:00 AM</strong>. What about your <strong>evening check-in</strong>?<br /><em style="color:#8AADC4">e.g. 9pm</em>
+        <div class="bubble-time">9:00 AM ✓✓</div>
+      </div>
+      <div class="bubble bubble-user">
+        10pm
+        <div class="bubble-time">9:01 AM ✓✓</div>
+      </div>
+      <div class="bubble bubble-bot">
+        🎯 <strong>You are all set, Peter!</strong><br />☀️ Morning: 8:00 AM · 🌙 Evening: 10:00 PM<br /><br />
+        What would you like me to remind you about first?
+        <div class="bubble-time">9:01 AM ✓✓</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="how-it-works">
+  <p class="section-label">How It Works</p>
+  <h2 class="section-title">Set up in under a minute.<br />Never forget again.</h2>
+  <p class="section-sub">No app to download. No account to create. Just open WhatsApp and say Hi.</p>
+  <div class="steps">
+    <div class="step-card">
+      <div class="step-number">1</div>
+      <h3>Say Hi on WhatsApp</h3>
+      <p>Send "Hi" to Pathrose. Tell me your name and your preferred morning and evening times. Done in under a minute.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">2</div>
+      <h3>Tell me what to remember</h3>
+      <p>Just talk naturally. "Remind me Friday at 6pm about dentist and Saturday at 11am to pick up meds." Pathrose handles both at once.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">3</div>
+      <h3>Get reminded at the right time</h3>
+      <p>Pathrose messages you at exactly the right moment. Snooze, mark done, edit — all by just replying in plain English.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <p class="section-label">Features</p>
+  <h2 class="section-title">Everything you need.<br />Nothing you don't.</h2>
+  <p class="section-sub">Built for people who want to stay on top of their day without the complexity.</p>
+  <div class="features">
+    <div class="feature-card"><div class="feature-icon">☀️</div><h3>Morning Briefing</h3><p>Every morning at your chosen time, Pathrose sends you a complete list of everything on your plate for the day.</p></div>
+    <div class="feature-card"><div class="feature-icon">🌙</div><h3>Evening Check-In</h3><p>Each evening, review your day. Mark tasks done and Pathrose automatically reschedules anything incomplete to tomorrow.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔔</div><h3>Multiple Reminders at Once</h3><p>Set several reminders in one message. Pathrose extracts each one and shows you all of them for confirmation before saving.</p></div>
+    <div class="feature-card"><div class="feature-icon">⏰</div><h3>Early Reminders</h3><p>Want a heads-up before something important? Say "remind me 2 hours before" and Pathrose creates the early alert automatically.</p></div>
+    <div class="feature-card"><div class="feature-icon">📅</div><h3>Google Calendar Sync</h3><p>Connect your Google Calendar once and every reminder you approve gets added automatically. No manual entry ever again.</p></div>
+    <div class="feature-card"><div class="feature-icon">🧠</div><h3>AI Understanding</h3><p>Say it any way you want — with typos, slang, or casually. Pathrose understands natural language and always confirms before saving.</p></div>
+  </div>
+</section>
+
+<div class="stats-section">
+  <div class="stats-grid">
+    <div><div class="stat-number">&lt;1min</div><div class="stat-label">Setup time</div></div>
+    <div><div class="stat-number">0</div><div class="stat-label">Apps to install</div></div>
+    <div><div class="stat-number">24/7</div><div class="stat-label">Always available</div></div>
+    <div><div class="stat-number">100%</div><div class="stat-label">On WhatsApp</div></div>
+  </div>
+</div>
+
+<section class="cta-section">
+  <h2>Ready to stop<br /><span style="background:linear-gradient(135deg,#3DDC84,#2B7FD4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">forgetting things?</span></h2>
+  <p>Join the private beta. Say Hi to Pathrose on WhatsApp and get set up in under a minute.</p>
+  <a href="https://wa.me/18143634489?text=Hi" class="btn-primary" target="_blank">
+    <svg class="wa-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Start on WhatsApp — It's Free
+  </a>
+</section>
+
+<footer>
+  <div class="footer-logo">
+    <img src="logo.png" alt="Pathrose" onerror="this.style.display='none'" />
+    <span>Pathrose</span>
+  </div>
+  <p>Your personal WhatsApp reminder assistant.</p>
+  <p>Currently in private beta · <a href="mailto:peterjohncheeramattam@gmail.com">Contact us</a></p>
+  <p style="margin-top:16px;font-size:12px;color:#4a6580;">© 2026 Pathrose. All rights reserved.</p>
+</footer>
 
 </body>
 </html>
